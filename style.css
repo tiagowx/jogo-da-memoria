@@ -28,6 +28,11 @@ body {
     transform: scale(1);
 }
 
+.card:active {
+    transform: scale(.97);
+    transform: transform .1s;
+}
+
 .card-front,
 .card-back {
     width: 100%;
