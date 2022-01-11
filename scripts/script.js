@@ -3,6 +3,7 @@ const cards = document.querySelectorAll('.card');
 let hasFlippedCard = false;
 let firstCard, secondCard;
 let lockBoard = false;
+let pairs = 0;
 
 function flipCard() {
     if (lockBoard) return;
@@ -22,6 +23,7 @@ function flipCard() {
 
 function checkForMath() {
     if (firstCard.dataset.card === secondCard.dataset.card) {
+        checkGameOver();
         disableCards();
         return;
     }
@@ -29,11 +31,13 @@ function checkForMath() {
 }
 
 function disableCards() {
-    firstCard.removeEventListener('click', flipcard);
-    secondCard.removeEventListener('click', flipcard);
+    firstCard.removeEventListener('click', flipCard);
+    secondCard.removeEventListener('click', flipCard);
 
     resetBoard();
 }
+
+
 
 function unflipCards() {
     lockBoard = true;
@@ -49,15 +53,37 @@ function unflipCards() {
 function resetBoard() {
     [hasFlippedCard, lockBoard] = [false, false];
     [firstCard, secondCard] = [null, null]
+
 }
 
-(function shuffle() {
+function shuffle() {
     cards.forEach((card) => {
         let randomPosition = Math.floor(Math.random() * 12);
         card.style.order = randomPosition;
     })
-})();
+};
 
-cards.forEach((card) => {
-    card.addEventListener('click', flipCard);
-})
+function checkGameOver() {
+    pairs++;
+    if (pairs === 6) {
+        alert("Parabéns!!! \nVocê acertou todos os pares! \nClique em 'ok' para continuar jogando.")
+        enableCards();
+        cards.forEach((card) => {
+            card.classList.remove('flip');
+        })
+        pairs == 0;
+        shuffle();
+    }
+
+}
+
+function enableCards() {
+    cards.forEach((card) => {
+        card.addEventListener('click', flipCard);
+    })
+}
+
+(function gameStarter() {
+    shuffle();
+    enableCards();
+})();
